@@ -33,6 +33,10 @@ export function getWebpackCommonConfig(
   if (appConfig.styles.length > 0) { entry['styles'] = styles; }
   if (appConfig.scripts.length > 0) { entry['scripts'] = scripts; }
 
+  if (appConfig.sassLoader && appConfig.sassLoader.includePaths) {
+    appConfig.sassLoader.includePaths = appConfig.sassLoader.includePaths.map((localPath: string) => path.resolve(projectRoot, localPath));
+  }
+
   return {
     devtool: 'source-map',
     resolve: {
@@ -122,6 +126,7 @@ export function getWebpackCommonConfig(
         { test: /\.eot$/, loader: 'file' }
       ]
     },
+    sassLoader: appConfig.sassLoader || {},
     plugins: [
       new webpack.ContextReplacementPlugin(/.*/, appRoot, lazyModules),
       new atl.ForkCheckerPlugin(),
