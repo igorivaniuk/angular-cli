@@ -6,6 +6,7 @@ const ProgressPlugin = require('webpack/lib/ProgressPlugin');
 import { NgCliWebpackConfig } from '../models/webpack-config';
 import { webpackOutputOptions } from '../models/';
 import { BuildOptions } from '../commands/build';
+import * as fs from 'fs';
 
 let lastHash: any = null;
 
@@ -40,8 +41,11 @@ export default Task.extend({
 
         if (stats.hash !== lastHash) {
           lastHash = stats.hash;
-          process.stdout.write(stats.toString(webpackOutputOptions) + '\n');
+          process.stdout.write(stats.toString(webpackOutputOptions) + '\n');          
         }
+        let statsFile = path.normalize(path.join(project.root, 'stats.watch.json'));
+        console.log(statsFile);
+        fs.writeFileSync(statsFile, JSON.stringify(stats.toJson()));
       });
     });
   }

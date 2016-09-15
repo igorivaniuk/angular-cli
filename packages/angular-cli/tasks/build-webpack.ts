@@ -5,6 +5,7 @@ import * as webpack from 'webpack';
 import { BuildOptions } from '../commands/build';
 import { NgCliWebpackConfig } from '../models/webpack-config';
 import { webpackOutputOptions } from '../models/';
+import * as fs from 'fs';
 
 // Configure build and output;
 let lastHash: any = null;
@@ -50,6 +51,10 @@ export default <any>Task.extend({
         if (stats.hash !== lastHash) {
           lastHash = stats.hash;
           process.stdout.write(stats.toString(webpackOutputOptions) + '\n');
+          
+          let statsFile = path.normalize(path.join(project.root, 'stats.json'));
+          console.log(statsFile);
+          fs.writeFileSync(statsFile, JSON.stringify(stats.toJson()));
         }
         resolve();
       });

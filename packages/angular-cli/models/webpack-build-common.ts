@@ -49,6 +49,7 @@ export function getWebpackCommonConfig(
       path: path.resolve(projectRoot, appConfig.outDir),
       filename: '[name].bundle.js'
     },
+    profile: true,
     module: {
       preLoaders: [
         {
